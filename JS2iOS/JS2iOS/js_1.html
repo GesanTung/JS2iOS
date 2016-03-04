@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+
+            <title>JS2iOS</title>
+            
+            <script type="text/javascript">
+                
+                function showResult(resultNumber) {
+                    //alert(resultNumber);
+                    document.getElementById("result").innerText = resultNumber;
+                }
+            
+                function showBn() {
+                   log('sds测试');
+                   var text =  Native.responeToWeb();
+                   log(text);
+                }
+            
+            </script>
+            
+    </head>
+    
+        
+
+        <div>
+            <font size="3" color="black"> <b id="result"> </b> </font>
+        </div>
+        <br/>
+        
+        <div id="div-a">
+            <center>
+                
+                <br/>
+                <input type="button" value="带2个入参的方法测试" onclick="Native.testMethodWithParam1Param2('param1_value','param2_value');" />
+                <br/>
+                <br/>
+                
+                <br/>
+                <input type="button" value="带2个入参的方法测试2" onclick="Native.testMethod(11111,'22222');" />
+                <br/>
+                <br/>
+                
+                <br/>
+                <input type="button" value="参数为数组的方法测试" onclick="Native.testArray([11111,'22222']);" />
+                <br/>
+                <br/>
+                
+                <input type="button" value="带一个参数的方法测试" onclick="Native.testLog('测试');" />
+                <br/>
+                <br/>
+                
+                <input type="button" value="测试在HTML页面显示数据的" onclick="Native.testShowTextOnHtml('1234');" />
+                <br/>
+                <br/>
+                
+                <br/>
+                <br/>
+                
+                <input type="button" value="测试在ios 返回参数" onclick="showBn();" />
+                <br/>
+                <br/>
+                
+                <!--<br/>
+                 <input type="button" value="计算阶乘" onclick="native.calculateForJS(input.value);" />
+                 <br/>
+                 <br/>
+                 
+                 
+                 <input type="button" value="测试log" onclick="log('测试');" />
+                 <br/>
+                 <br/>
+                 
+                 <input type="button" value="oc原生Alert" onclick="alert('alert');" />
+                 <br/>
+                 <br/>
+                 
+                 <input type="button" value="addSubView" onclick="addSubView('view');" />
+                 <br/>
+                 <br/>
+                 
+                 <a id="push" href="#" onclick="native.pushViewControllerTitle('SecondViewController','secondPushedFromJS');">
+                 push to second ViewController
+                 </a>
+                 
+                 <br/>-->
+                <br/>
+                
+            </center>
+        </div>
+    </body>
+    
+</html>

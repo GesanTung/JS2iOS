@@ -1,0 +1,391 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #737373;
+    background-color: white;
+    margin: 10px 13px 10px 13px;
+}
+table {
+	margin: 10px 0 15px 0;
+	border-collapse: collapse;
+}
+td,th {	
+	border: 1px solid #ddd;
+	padding: 3px 10px;
+}
+th {
+	padding: 5px 10px;	
+}
+
+a {
+    color: #0069d6;
+}
+a:hover {
+    color: #0050a3;
+    text-decoration: none;
+}
+a img {
+    border: none;
+}
+p {
+    margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #404040;
+    line-height: 36px;
+}
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 13px;
+}
+hr {
+    margin: 0 0 19px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+blockquote {
+    padding: 13px 13px 21px 15px;
+    margin-bottom: 18px;
+    font-family:georgia,serif;
+    font-style: italic;
+}
+blockquote:before {
+    content:"\201C";
+    font-size:40px;
+    margin-left:-10px;
+    font-family:georgia,serif;
+    color:#eee;
+}
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 18px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+code, pre {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+    background-color: #fee9cc;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+    font-size: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+pre {
+    display: block;
+    padding: 14px;
+    margin: 0 0 18px;
+    line-height: 16px;
+    font-size: 11px;
+    border: 1px solid #d9d9d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre code {
+    background-color: #fff;
+    color:#737373;
+    font-size: 11px;
+    padding: 0;
+}
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:10px auto;
+    }
+}
+@media print {
+	body,code,pre code,h1,h2,h3,h4,h5,h6 {
+		color: black;
+	}
+	table, pre {
+		page-break-inside: avoid;
+	}
+}
+</style>
+<title>JavaScript 与 iOS</title>
+
+</head>
+<body>
+<h1>JavaScript 与 iOS</h1>
+
+<h3>业务背景</h3>
+
+<ol>
+<li>Webview修改html网页中字体，调整or获取网页图片</li>
+<li>JavaScript 调用 iOS native 方法</li>
+</ol>
+
+
+<h3>解决方案</h3>
+
+<p>Webview 执行js代码</p>
+
+<ul>
+<li>stringByEvaluatingJavaScriptFromString</li>
+</ul>
+
+
+<p><strong>exp1：修改网页宽，重置图片size</strong></p>
+
+<pre><code>- (void)setWebViewHTMLProperty{
+   //修改服务器页面的meta的值
+     NSString *meta = [NSString     
+     stringWithFormat:@"document.getElementsByName(\"viewport\")[0].content = 
+     \"width=%f, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-
+     scalable=no\"", self.frame.size.width];
+    [self stringByEvaluatingJavaScriptFromString:meta];
+
+    [self stringByEvaluatingJavaScriptFromString:
+     @"var script = document.createElement('script');"
+     "script.type = 'text/javascript';"
+     "script.text = \"function ResizeImages() { "
+     "var var myimg;"
+     "var maxwidth = 300;"
+     "for(i=0;i &lt;document.images.length;i++){"
+     "myimg = document.images[i];"
+     "if(myimg.width &gt; maxwidth){"
+     "myimg.style.width = '95%%';"
+     "myimg.style.height = 'auto';"
+     "}"
+     "}"
+     "}\";"
+   "document.getElementsByTagName('head')[0].appendChild(script);"];
+   [self stringByEvaluatingJavaScriptFromString:@"ResizeImages();"];
+} 
+</code></pre>
+
+<p><strong>API 说明</strong></p>
+
+<p><em>- stringByEvaluatingJavaScriptFromString:
+Returns the result of running a JavaScript script. Although this method is not deprecated, best practice is to use the evaluateJavaScript:completionHandler: method of the WKWebView class instead.</em></p>
+
+<p><em>New apps should instead use the evaluateJavaScript:completionHandler: method from the WKWebView class. Legacy apps should adopt that method if possible.</em></p>
+
+<p><em>The stringByEvaluatingJavaScriptFromString: method waits synchronously for JavaScript evaluation to complete. If you load web content whose JavaScript code you have not vetted, invoking this method could hang your app. Best practice is to adopt the WKWebView class and use its evaluateJavaScript:completionHandler: method instead.</em></p>
+
+<p><a href="https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIWebView_Class/">Apple Developer Link : stringByEvaluatingJavaScriptFromString</a></p>
+
+<p>2 JavaScript 调用iOS native</p>
+
+<ul>
+<li><p>(BOOL)webView:(UIWebView <em>)webView
+shouldStartLoadWithRequest:(NSURLRequest </em>)request
+navigationType:(UIWebViewNavigationType)navigationType</p>
+
+<pre><code>  HTML 源码
+  &lt;html&gt;
+      &lt;head&gt;
+          &lt;title&gt;测试网页&lt;/title&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+          &lt;br /&gt;
+          &lt;a href="tung://login?func=login&amp;name=zengjing&amp;password=123456"&gt;登陆&lt;/a&gt;
+      &lt;/body&gt;
+  &lt;/html&gt;
+
+ iOS 源码
+  - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+  {
+      NSURL *url = [request URL];
+      if([[url scheme] isEqualToString:@"tung"]) {//获取协议名
+
+          if([[url host] isEqualToString:@"login"])//获取域
+          {
+              //获取URL上面的参数
+              NSDictionary *params = [self getParams:[url query]];
+             [params objectForKey:@"func"];
+          }
+          return NO;
+      }
+      return YES;
+  } 
+</code></pre></li>
+<li><p>Webview添加手势，iOS传入当前时间相应坐标通过js 代码 获取对应元素</p>
+
+<pre><code>   - (void)handleGestureRecognizer:(UITapGestureRecognizer *)gesture{
+      if (gesture.state == UIGestureRecognizerStateEnded) {
+          NSString *path = [[NSBundle mainBundle] pathForResource:@"webscript" ofType:@"js"];
+          NSString *script = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+          [self.webView stringByEvaluatingJavaScriptFromString:script];
+
+          CGPoint point = [gesture locationInView:self.webView];
+
+          //// Get the URL link at the touch location
+          NSString *function = [NSString stringWithFormat:@"script.getElement(%f,%f);", point.x, point.y];
+          NSString *result = [self.webView stringByEvaluatingJavaScriptFromString:function];
+
+          if(result != nil &amp;&amp; result.length != 0) {
+              NSLog(@"%@", result);
+              NSDictionary *dict = [NSString JSONObjectWithString:result];
+              if (dict[@"docid"]&amp;&amp;dict[@"channelId"]&amp;&amp;[dict[@"channelId"] length]&amp;&amp;[dict[@"docid"] length]) {
+                  NSMutableDictionary *pDict = [NSMutableDictionary dictionaryWithDictionary:dict];
+                  if ([dict[@"docid"]intValue]==-1) {
+                      [pDict setObject:@"5" forKey:@"clickType"];
+                  }else{
+                      [pDict setObject:@"1" forKey:@"clickType"];
+                  }
+                  [self goNextPageDetail:pDict];
+                  _gDetailAction = YES;
+              }else{
+                  _gDetailAction = NO;
+              }
+
+          }
+          gesture.view.accessibilityActivationPoint = point;
+      }
+  }
+
+  getLink = function(x,y) {
+      var tags = "";
+      var e = "";
+      var offset = 0;
+      var docid = "";
+      var channelId = "";
+      var url ="";
+      var result = "";
+      while ((tags.length == 0) &amp;&amp; (offset &lt; 5)) {
+          e = document.elementFromPoint(x,y+offset);
+          while (e) {
+              if (e.href) {
+                  if(e.getAttribute('docid')){
+                      docid= e.getAttribute('docid');
+                  }
+                  if(e.getAttribute('channelId')){
+                      channelId= e.getAttribute('channelId');
+                  }
+
+                  url= e.href;
+
+                  result =  '{ "url" : "'+url+'" , "channelId" : "'+ channelId +'", "docid" : "'+ docid +'"}';
+                  break;
+              }
+              e = e.parentNode;
+          }
+
+          offset++;
+      }
+      if (result != null &amp;&amp; result.length &gt; 0){
+          return result;}
+      else {
+          return null;
+      }
+  }
+</code></pre></li>
+</ul>
+
+
+<hr />
+
+<hr />
+
+<h3>Pro Java​Script​Core</h3>
+
+<p>Webview 执行js代码</p>
+
+<ul>
+<li><p>evaluateScript</p>
+
+<pre><code>  JSContext *context = [webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"]
+  context.evaluateScript("js")
+</code></pre></li>
+</ul>
+
+
+<p>JavaScript 调用iOS native</p>
+
+<ul>
+<li><p>Block or JSExport</p>
+
+<pre><code>  【Block】
+  JSContext *context = [[JSContext alloc]init];
+  context[@"log"] = ^(NSString *msg){
+      NSLog(@"trs:%@",msg);
+  };
+  [contextSecond evaluateScript:@"log('300027')"];
+
+  【JSExport】
+  @protocol LogJSExpProtocol &lt;JSExport&gt;
+  - (Bool)log;
+  @end
+  @interface LogObject : NSObject &lt;LogJSExpProtocol&gt;
+  @end
+
+  .m
+  #import "LogObject.h"
+  @implementation LogObject
+
+  -(void)log:(NSString*)string {
+       NSLog(@"trs:%@",msg);
+  }
+  @end
+
+  - (void) testLog
+  {
+      JSContext *context = [[JSContextalloc]init];
+      context[@"ios"] = [[LogObject alloc]init];
+      [context evaluateScript:@"ios.log(\"300027\")"];
+  }
+</code></pre></li>
+</ul>
+
+
+<h3>推荐参考知识点</h3>
+
+<ul>
+<li>Java​Script​Core,WKwebview</li>
+<li>React Native</li>
+<li>DOM</li>
+</ul>
+
+</body>
+</html>
