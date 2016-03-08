@@ -22,6 +22,8 @@
 -(void)test:(NSNumber *)param1 method:(NSString *)param2;
 -(void)testArray:(NSArray *)dataArray;
 
+-(BOOL)login:(NSString*)name password:(NSString*)pwd;
+
 -(NSString*)responeToWeb;
 
 @end
@@ -71,7 +73,6 @@
     
     context[@"Native"] = self; //以JSExport 协议关联 native 的方法
     
-    
     context[@"log"] = ^(NSString *str){//以block 形式关联 JavaScript function
         NSLog(@"%@", str);
     };
@@ -87,6 +88,18 @@
     };
 }
 
+- (void)updateWeb{
+    //网页元素增删改
+    [context evaluateScript:
+     @"var para=document.createElement('p');"
+     "var node=document.createTextNode('This is new.');"
+     "para.appendChild(node);"
+     
+     "var element=document.getElementById('d1');"
+     "element.appendChild(para);"
+     ];
+    [myWebView reload];
+}
 
 -(void)testArray:(NSArray *)dataArray{
     NSLog(@"testArray = %@", dataArray);
@@ -94,6 +107,10 @@
 
 -(NSString*)responeToWeb{
     return  @"respone by ios = hello web";
+}
+
+-(BOOL)login:(NSString*)name password:(NSString*)pwd{
+    return  true;
 }
 
 -(void)test:(NSNumber *)param1 method:(NSString *)param2{

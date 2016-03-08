@@ -18,6 +18,15 @@
                    log(text);
                 }
             
+            function login() {
+
+                var name =   document.getElementById("username").value ;
+                var pwd =   document.getElementById("password").value ;
+                log(name + pwd);
+                var flag =  Native.loginPassword(name,pwd);
+                log("登陆:" + flag);
+            }
+            
             </script>
             
     </head>
@@ -37,33 +46,42 @@
                 <br/>
                 <br/>
                 
-                <br/>
-                <input type="button" value="带2个入参的方法测试2" onclick="Native.testMethod(11111,'22222');" />
-                <br/>
-                <br/>
-                
-                <br/>
-                <input type="button" value="参数为数组的方法测试" onclick="Native.testArray([11111,'22222']);" />
-                <br/>
-                <br/>
-                
-                <input type="button" value="带一个参数的方法测试" onclick="Native.testLog('测试');" />
-                <br/>
-                <br/>
-                
-                <input type="button" value="测试在HTML页面显示数据的" onclick="Native.testShowTextOnHtml('1234');" />
-                <br/>
-                <br/>
-                
-                <br/>
-                <br/>
-                
                 <input type="button" value="测试在ios 返回参数" onclick="showBn();" />
                 <br/>
                 <br/>
                 
+                <div id="d1">
+                    <p id="p1">This is a paragraph.</p>
+                </div>
+                
+                <form id="login">
+                    <h1>登录</h1>
+                    
+                        <input id="username" type="text" placeholder="用户名" autofocus required>
+                        <input id="password" type="password" placeholder="密码" required>
+                        <input type="submit" id="submit" value="登录" onclick="login();">
+                           
+                </form>
+                
                 <!--<br/>
-                 <input type="button" value="计算阶乘" onclick="native.calculateForJS(input.value);" />
+                 <br/>
+                 <input type="button" value="带2个入参的方法测试2" onclick="Native.testMethod(11111,'22222');" />
+                 <br/>
+                 <br/>
+                 
+                 <br/>
+                 <input type="button" value="参数为数组的方法测试" onclick="Native.testArray([11111,'22222']);" />
+                 <br/>
+                 <br/>
+                 
+                 <input type="button" value="带一个参数的方法测试" onclick="Native.testLog('测试');" />
+                 <br/>
+                 <br/>
+                 
+                 <input type="button" value="测试在HTML页面显示数据的" onclick="Native.testShowTextOnHtml('1234');" />
+                 <br/>
+                 <br/>
+                 
                  <br/>
                  <br/>
                  
