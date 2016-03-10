@@ -27,6 +27,15 @@
                 log("登陆:" + flag);
             }
             
+            function update(){
+                var para=document.createElement('p');
+                var node=document.createTextNode('This is new.');
+                para.appendChild(node);
+                
+                var element=document.getElementById('d1');
+                element.appendChild(para);
+            }
+            
             </script>
             
     </head>
@@ -51,7 +60,7 @@
                 <br/>
                 
                 <div id="d1">
-                    <p id="p1">This is a paragraph.</p>
+                    <p id="p1">HTML 元素增删改.</p>
                 </div>
                 
                 <form id="login">
@@ -59,7 +68,7 @@
                     
                         <input id="username" type="text" placeholder="用户名" autofocus required>
                         <input id="password" type="password" placeholder="密码" required>
-                        <input type="submit" id="submit" value="登录" onclick="login();">
+                        <input type="button" id="submit" value="登录" onclick="login();">
                            
                 </form>
                 

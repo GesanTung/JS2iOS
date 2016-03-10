@@ -44,8 +44,10 @@
     class_addProtocol([ViewController class],@protocol(JSTungExport));
     
     // Do any additional setup after loading the view.
-    NSString *path = [[[NSBundle mainBundle] bundlePath]  stringByAppendingPathComponent:@"js_1.html"];
-
+    //NSString *path = [[[NSBundle mainBundle] bundlePath]  stringByAppendingPathComponent:@"js_1.html"];
+    
+    NSString *path = @"http://192.168.5.180:8080/trs/jsoc.html";
+    
     myWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height-20)];
     myWebView.delegate = self;
     NSURL *URL = [NSURL URLWithString:path];
@@ -88,17 +90,18 @@
     };
 }
 
-- (void)updateWeb{
+- (void)updateWeb:(NSString*)name{
     //网页元素增删改
-    [context evaluateScript:
-     @"var para=document.createElement('p');"
-     "var node=document.createTextNode('This is new.');"
-     "para.appendChild(node);"
-     
-     "var element=document.getElementById('d1');"
-     "element.appendChild(para);"
-     ];
-    [myWebView reload];
+    NSString *js = [NSString stringWithFormat:
+                    @"var para=document.createElement('p');"
+                    "var node=document.createTextNode('欢迎'+'%@' + '登入');"
+                    "para.appendChild(node);"
+                    
+                    "var element=document.getElementById('d1');"
+                    "element.appendChild(para);"
+                    ,name];
+    
+    [context evaluateScript:js];
 }
 
 -(void)testArray:(NSArray *)dataArray{
@@ -110,6 +113,7 @@
 }
 
 -(BOOL)login:(NSString*)name password:(NSString*)pwd{
+    [self updateWeb:name];
     return  true;
 }
 

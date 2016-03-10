@@ -304,6 +304,7 @@
 				A65943791C896EB100ACCECA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
