@@ -206,6 +206,5 @@ JavaScript 调用iOS native
 
 ###推荐参考知识点
 * Java​Script​Core,WKwebview 
-* React Native
 * DOM
 
