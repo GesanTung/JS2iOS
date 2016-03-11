@@ -44,9 +44,9 @@
     class_addProtocol([ViewController class],@protocol(JSTungExport));
     
     // Do any additional setup after loading the view.
-    //NSString *path = [[[NSBundle mainBundle] bundlePath]  stringByAppendingPathComponent:@"js_1.html"];
+    NSString *path = [[[NSBundle mainBundle] bundlePath]  stringByAppendingPathComponent:@"js_1.html"];
     
-    NSString *path = @"http://192.168.5.180:8080/trs/jsoc.html";
+    //NSString *path = @"http://192.168.5.180:8080/trs/jsoc.html";
     
     myWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height-20)];
     myWebView.delegate = self;
