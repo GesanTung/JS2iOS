@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import <objc/runtime.h>
+#import "SDPhotoBrowser.h"
 
 #import <JavaScriptCore/JavaScriptCore.h>
 
@@ -24,15 +25,20 @@
 
 -(BOOL)login:(NSString*)name password:(NSString*)pwd;
 
+- (void)updateWebView;
+
+- (void)preview:(int)index  images:(id)image;
+
 -(NSString*)responeToWeb;
 
 @end
 
 
-@interface ViewController ()<UIWebViewDelegate>
+@interface ViewController ()<UIWebViewDelegate,SDPhotoBrowserDelegate>
 {
     UIWebView *myWebView;
     JSContext *context;
+    NSString  *gImageUrl;
 }
 @end
 
@@ -78,7 +84,16 @@
     context[@"log"] = ^(NSString *str){//以block 形式关联 JavaScript function
         NSLog(@"%@", str);
     };
+    
     //
+    //给网页图片添加点击事件
+    NSString *js = [NSString stringWithFormat:
+                    @"var imgs=document.getElementsByTagName('img');"
+                    "var length=imgs.length;"
+                    "for(var i=0;i<length;i++){img=imgs[i];"
+                    "img.onclick=function(){Native.previewImages(0,this.src);}}"];
+    [context evaluateScript:js];
+    
 
     __weak typeof(self) weakSelf = self;
     context[@"addSubView"] = ^(NSString *viewname) {
@@ -132,6 +147,26 @@
     NSString *resultText = [NSString stringWithFormat:@"%@ date=%@",showText, [NSDate date]];
     NSLog(@"%@", resultText);
     [context[@"showResult"] callWithArguments:@[resultText]];//回调JS的方法showResult(resultText);
+}
+
+- (void)updateWebView{
+    NSURL *URL = [NSURL URLWithString:@"http://3g.163.com/ntes/special/0034073A/wechat_article.html?docid=BI42OEHU000915BF"];
+    NSURLRequest *requestww = [NSURLRequest requestWithURL:URL];
+    [myWebView loadRequest:requestww];
+}
+
+- (void)preview:(int)index  images:(id)image{
+    SDPhotoBrowser* browser = [[SDPhotoBrowser alloc]initWithFrame:self.view.frame];
+    browser.sourceImagesContainerView = self.view;
+    browser.delegate = self;
+    gImageUrl = image;
+    browser.imageCount = 1;
+    [browser show];
+}
+
+// 返回高质量图片的url
+- (NSURL *)photoBrowser:(SDPhotoBrowser *)browser highQualityImageURLForIndex:(NSInteger)index{
+    return [NSURL URLWithString:gImageUrl];
 }
 
 @end

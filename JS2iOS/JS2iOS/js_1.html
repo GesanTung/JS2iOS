@@ -12,29 +12,37 @@
                     document.getElementById("result").innerText = resultNumber;
                 }
             
-                function showBn() {
+                function showhtml() {
                    log('sds测试');
-                   var text =  Native.responeToWeb();
-                   log(text);
+                   Native.updateWebView();
                 }
             
-            function login() {
+                function login() {
 
-                var name =   document.getElementById("username").value ;
-                var pwd =   document.getElementById("password").value ;
-                log(name + pwd);
-                var flag =  Native.loginPassword(name,pwd);
-                log("登陆:" + flag);
-            }
+                    var name = document.getElementById("username").value ;
+                    var pwd = document.getElementById("password").value ;
+                    log(name + pwd);
+                    var flag =  Native.loginPassword(name,pwd);
+                    log("登陆:" + flag);
+                }
             
-            function update(){
-                var para=document.createElement('p');
-                var node=document.createTextNode('This is new.');
-                para.appendChild(node);
-                
-                var element=document.getElementById('d1');
-                element.appendChild(para);
-            }
+                function updateImgTag (tag){
+                    var imgs=document.getElementsByTagName('img');
+                    var length=imgs.length;
+                    for(var i=0;i<length;i++){
+                        img=imgs[i];
+                        img.onclick=function(){Native.previewImages(0,this.src);}
+                    }
+                }
+            
+                function update(){
+                    var para=document.createElement('p');
+                    var node=document.createTextNode('This is new.');
+                    para.appendChild(node);
+                    
+                    var element=document.getElementById('d1');
+                    element.appendChild(para);
+                }
             
             </script>
             
@@ -55,7 +63,7 @@
                 <br/>
                 <br/>
                 
-                <input type="button" value="测试在ios 返回参数" onclick="showBn();" />
+                <input type="button" value="网页图片预览功能" onclick="showhtml();" />
                 <br/>
                 <br/>
                 
